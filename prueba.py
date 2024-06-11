@@ -17,25 +17,27 @@ def mostrar_texto(tema):
 
         tag_limitador = soup.find('meta', {'property': 'mw:PageProp/toc'})  # Buscamos el tag limitador de sección (<meta property="mw:PageProp/toc">) para que traiga solamente los primeros párrafos del artículo
 
-        parrafos = tag_limitador.find_all_previous('p')  # Buscamos todos los párrafos que se encuentran antes del tag limitador (va buscando hacia arriba)
+        if tag_limitador is not None:  # Preguntamos si encontró el limitador (hay artículos que existen en Wikipedia pero tienen varias posibles opciones para ese término y no tienen el limitador)
 
-        parrafos = list(reversed(parrafos))   # Invertimos la lista de párrafos para mostrarlos en el orden correcto
+            parrafos = tag_limitador.find_all_previous('p')  # Buscamos todos los párrafos que se encuentran antes del tag limitador (va buscando hacia arriba)
 
-        texto_para_mostrar = '\n'.join([p.get_text() for p in parrafos])  # Obtenemos el texto plano de los párrafos en una sola variable tipo string
+            parrafos = list(reversed(parrafos))   # Invertimos la lista de párrafos para mostrarlos en el orden correcto
 
+            texto_para_mostrar = '\n'.join([p.get_text() for p in parrafos])  # Obtenemos el texto plano de los párrafos en una sola variable tipo string
 
-        return texto_para_mostrar  # Devolvemos el texto
+            return texto_para_mostrar  # Devolvemos el texto
+        else:
+            return False
     else:
         return False  # Devolvemos falso si no se pudo localizar el texto
     
 
 tema = input("Ingrese el tema: ").replace(' ','_')  # Reemplazamos los espacios con _ para poder hacer busqueda de temas con varias palabras
-aux = (mostrar_texto(tema))
 
 while tema != "fin":
+    aux = (mostrar_texto(tema))
     if (aux):
         print(aux)
     else:
         print("Error")
     tema = input("Ingrese el tema: ").replace(' ','_')
-    aux = (mostrar_texto(tema))
