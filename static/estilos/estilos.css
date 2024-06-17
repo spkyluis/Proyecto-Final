@@ -118,7 +118,8 @@ a.logo-nav{
 }
 
 img.logo-nav{
-    /* margin-top: 10px; */
+    padding-top: 10px;
+    height: 80%;
 }
 
 .cuadro-busqueda{
