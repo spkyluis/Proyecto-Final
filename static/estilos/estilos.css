@@ -25,7 +25,8 @@
     box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-.logo-nav{height: 80%;
+.logo-nav{
+    /* height: 80%; */
     overflow: hidden;
     margin-left: 1em;
 }
@@ -97,9 +98,27 @@ a {
     font-weight: 800;
 }
 
+a.logo-nav{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    margin-left: 1em;
+    text-align: left;
+    margin: 0px;
+    padding: 0%;
+}
+
 a:hover {
     background-color: black;
     color:#fdab13
+}
+
+a.logo-nav{
+    background-color: transparent;
+}
+
+img.logo-nav{
+    /* margin-top: 10px; */
 }
 
 .cuadro-busqueda{
