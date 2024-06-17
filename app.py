@@ -31,7 +31,7 @@ def mostrar_texto(tema):
 
         tag_limitador = soup.find('meta', {'property': 'mw:PageProp/toc'})  # Buscamos el tag limitador de sección (<meta property="mw:PageProp/toc">) para que traiga solamente los primeros párrafos del artículo
 
-        if tag_limitador is not None:  # Preguntamos si encontró el limitador (hay artículos que existen en Wikipedia pero tienen varias posibles opciones para ese término y no tienen el limitador)
+        if tag_limitador is not None and tag_limitador.find_previous('p') is not None:  # Preguntamos si encontró el limitador (hay artículos que existen en Wikipedia pero tienen varias posibles opciones para ese término y no tienen el limitador) y además antes hay algún párrafo para mostrar
 
             parrafos = tag_limitador.find_all_previous('p')  # Buscamos todos los párrafos que se encuentran antes del tag limitador (va buscando hacia arriba)
 
