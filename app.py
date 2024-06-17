@@ -18,6 +18,8 @@ def mostrar_texto(tema):
 
     url_Wikipedia = "https://es.wikipedia.org/wiki/"  # URL de Wikipedia sin tema
 
+    tema = str(tema).lower()
+
     respuesta = requests.get(url_Wikipedia + tema)  # Cargamos la página de Wikipedia con el tema
 
     if respuesta.status_code == 200:  # Si no es 200, no se encontró la página o hubo algún tipo de error
