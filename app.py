@@ -1,9 +1,9 @@
-import mysql.connector.errorcode
 import requests  # Librería para poder acceder a una página
 from bs4 import BeautifulSoup  # Librería para poder buscar en el HTML
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import mysql.connector
+import mysql.connector.errorcode
 
 
 #app = Flask(__name__)
@@ -18,7 +18,7 @@ def mostrar_texto(tema):
 
     url_Wikipedia = "https://es.wikipedia.org/wiki/"  # URL de Wikipedia sin tema
 
-    tema = str(tema).lower()
+    tema = str(tema).lower()  # Pasamos a minúscula lo que se busca para poder armar la dirección de Wikipedia correctamente
 
     respuesta = requests.get(url_Wikipedia + tema)  # Cargamos la página de Wikipedia con el tema
 
@@ -192,7 +192,7 @@ def limpiar_bd():
 def listar_alfa():
     #listar por orden alfabetico
     listado = altapedia.listar_alfa()
-    lista_de_palabras = [d['tema'] for d in listado]
+    lista_de_palabras = [d['tema'] for d in listado]  # De tupla campo - contenido queda solo el contenido
     #return jsonify(listado)
     return render_template("listado.html",  lista_palabras=lista_de_palabras, mensaje="Orden alfabético")
 
@@ -200,7 +200,7 @@ def listar_alfa():
 def listar_popu():
     #listar por orden popularidad
     listado = altapedia.listar_popu()
-    lista_de_palabras = [d['tema'] for d in listado]
+    lista_de_palabras = [d['tema'] for d in listado]  # De tupla campo - contenido queda solo el contenido
     #return jsonify(listado)
     return render_template("listado.html",  lista_palabras=lista_de_palabras, mensaje="Orden de popularidad")
     
