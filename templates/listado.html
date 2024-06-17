@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{{ url_for('static', filename='estilos/estilos.css') }}">
+
+<title>ALTAPEDIA</title>
+
+<script src="{{ url_for('static', filename='js/listado.js') }}"></script>
+
+</head>
+
+<body>
+
+  <header>
+
+      <nav class="navbar-index">
+          <img class="logo-nav" src="{{ url_for('static', filename='img/wikipedia-logo.png') }}" alt="">
+      </nav>
+
+  </header>
+
+  <div class="contenido-index">
+
+    <div class="cuadro-busqueda"> 
+      <form action="/listaralfa" method="get">
+        <input type="submit" value="Listado Alfabético">
+      </form>
+      <form action="/listarpopu" method="get">
+        <input type="submit" value="Listado por Popularidad">
+      </form>
+      
+    </div>
+    <div class="campo-busqueda">
+      <input type="search" id="campo-busqueda" placeholder="Buscar...">
+    </div>
+
+    <div class="cuadro-mensaje">
+      {{mensaje}}
+    </div>
+
+    <div class="lista-palabras">
+      <ul id="lista-palabras">
+      <!-- Acá se cargarán las palabras -->
+      </ul>
+    </div>
+
+  
+</div>
+
+
+  <script>
+    var listaPalabras = {{ lista_palabras | tojson }};  // Carga la lista de palabras que recibe de Python
+
+    const campoBusqueda = document.getElementById("campo-busqueda");  // Ubica el campo de búsqueda en el listado de palabras
+    campoBusqueda.addEventListener("input", filtrar);  // Está atento a cuando se escriba algo en el campo de búsqueda y llama a la función correspondiente (filtrar)
+
+  </script>
+
+
+
+</body>
+
+</html>

@@ -23,10 +23,14 @@
           <form action="/analizar" method="post">
             <input type="text" name="busqueda" id="busqueda" placeholder="..Ingrese el tema de busqueda.." >
             <input type="submit" value="Buscar">
-            <!-- <button><b>BUSCAR</b></button> -->
-
           </form>
+          <button name="listados" onclick="window.location.href='/listaralfa'">Ver listados</button>
         </div>
+
+        <div class="cuadro-mensaje">
+            {{mensaje}}
+        </div>
+
 
         <div class="cuadro-texto">
             <textarea name="resultado" id="" rows="30" cols="160" placeholder="...Gracias por utilizar < ALTAPEDIA > La informacion solicitada será mostrada aquí...">{{resultado}}</textarea>

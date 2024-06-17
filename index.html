@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./static/estilos/estilos.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos/estilos.css') }}">
 
     <title>ALTAPEDIA</title>
 </head>
@@ -12,7 +12,7 @@
     <header>
 
         <nav class="navbar-index">
-            <img class="logo-nav" src="./static/img/wikipedia-logo.png" alt="">
+            <img class="logo-nav" src="{{ url_for('static', filename='img/wikipedia-logo.png') }}" alt="">
         </nav>
 
     </header>
@@ -20,18 +20,24 @@
     <div class="contenido-index">
 
         <div class="cuadro-busqueda"> 
-            <input type="text" placeholder="  ..Ingrese el tema de busqueda.." >
-            
-            <button><b>BUSCAR</b></button>
+          <form action="/analizar" method="post">
+            <input type="text" name="busqueda" id="busqueda" placeholder="..Ingrese el tema de busqueda.." >
+            <input type="submit" value="Buscar">
+          </form>
+         
+        </div>
+
+        <div class="cuadro-mensaje">
+            {{mensaje}}
         </div>
 
         <div class="cuadro-texto">
-            <textarea name="" id="" rows="30" cols="160" placeholder="  ..Gracias por utilizar < ALTAPEDIA > La informacion solicitada será mostrada aquí..."></textarea>
+            <textarea name="resultado" id="" rows="30" cols="160" placeholder="...Gracias por utilizar < ALTAPEDIA > La informacion solicitada será mostrada aquí...">{{resultado}}</textarea>
         </div>
         
 
 
     </div>
-    
+
 </body>
 </html>
