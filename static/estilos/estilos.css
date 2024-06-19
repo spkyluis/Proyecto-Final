@@ -45,7 +45,7 @@ h1, h2, h3, h4, h5, h6 {
 
 table {
     
-    max-width: 90%;
+    max-width: 100%;
     margin: 0 auto;
     padding: 40px;
     background-color: rgb(173, 173, 173);
@@ -56,7 +56,8 @@ table {
 
 input{
     height: 30px;
-    width: 400px;
+    width: 25vw;
+    min-width: 260px;
     
 }
 
@@ -131,7 +132,7 @@ img.logo-nav{
 
 .cuadro-texto{
     margin-top: 0%;
-    
+
 }
 
 .cuadro-mensaje{
@@ -143,8 +144,11 @@ img.logo-nav{
 
 .lista-palabras{
     padding-top: 20px;
+    height: 30vw;
+    width: 300px;
+    overflow: auto;
 }
-
+    
 .campo-busqueda{
     display: flex;
     flex-direction: row;
@@ -186,4 +190,21 @@ img.logo-nav{
 
 #btn-close:hover {
     background-color: #aaa;
+}
+
+/* --------------- (corte) ------------------------- */
+
+@media screen and (max-width: 767px) {
+
+
+
+
+    .cuadro-busqueda{
+        /* display: flex; */
+        flex-direction: column;
+        align-items: center;
+        
+        
+    }
+
 }
