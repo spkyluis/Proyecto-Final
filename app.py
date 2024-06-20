@@ -103,9 +103,12 @@ class Altapedia:
         return self.cursor.lastrowid
 
     def listar_popu(self):
+        self.cursor.execute("SELECT SUM(popularidad) AS total_popularidad FROM temas")
+        total = self.cursor.fetchone()
+
         self.cursor.execute("SELECT * FROM temas ORDER BY popularidad DESC LIMIT 10")
         productos = self.cursor.fetchall()
-        return productos
+        return productos, total
 
     def listar_alfa(self):
         self.cursor.execute("SELECT tema FROM temas ORDER BY tema")
@@ -199,10 +202,23 @@ def listar_alfa():
 @app.route("/listarpopu", methods=["GET"])
 def listar_popu():
     #listar por orden popularidad
-    listado = altapedia.listar_popu()
-    lista_de_palabras = [d['tema'] for d in listado]  # De tupla campo - contenido queda solo el contenido
+    listado, total = altapedia.listar_popu()
+
+    total_nro = int(total['total_popularidad'])
+
+    #lista_de_palabras = [d['tema'] for d in listado]  # De tupla campo - contenido queda solo el contenido
+
+    lista_de_palabras = [dict(tema=palabra["tema"], popularidad=palabra["popularidad"]) for palabra in listado]  # Armamos la lista de tema y popularidad
+
+    listado_para_mostrar = []  # La lista que vamos a mostrar vacía
+    
+    for elemento in lista_de_palabras:  # Por cada elemento en la lista de temas y popularidad
+        popularidad = int(elemento['popularidad'])  # Guardamos la popularidad
+        porcentaje_popularidad = (popularidad*100)/total_nro  #  Calculamos el porcentaje
+        listado_para_mostrar.append(f"{elemento['tema']} ({porcentaje_popularidad:.2f}%)")  # Armamos la lista para mostar "tema (porcentaje con 2 decimales%)"
+
     #return jsonify(listado)
-    return render_template("listado.html",  lista_palabras=lista_de_palabras, mensaje="Orden de popularidad")
+    return render_template("listado.html",  lista_palabras=listado_para_mostrar, mensaje="Orden de popularidad - Top 10")
     
     
 

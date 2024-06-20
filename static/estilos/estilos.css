@@ -101,7 +101,8 @@ a {
 
 a.logo-nav{
     height: 100%;
-    width: 100%;
+    /* width: 100%; */
+    width: auto;
     overflow: hidden;
     margin-left: 1em;
     text-align: left;
@@ -128,6 +129,10 @@ img.logo-nav{
     flex-direction: row;
     gap: 20px;
     align-items: center;
+}
+
+div textarea{
+    width: 95vw;
 }
 
 .cuadro-texto{
