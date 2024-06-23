@@ -11,14 +11,19 @@ app = Flask(__name__, static_folder='static')
 CORS(app)  # Esto habilitará CORS para todas las rutas
 
 def formatear_tema(tema):
-    tema = tema.strip().upper()
+    #tema = tema.strip().upper()
+    tema = tema.strip()  # Elimina espacios al principio y al final
+    tema = ' '.join(tema.split())  # Separa por espacios las palabras y las une con un solo espacio ("abc     de" -> "abc de")
+    tema = tema.upper()  # Convierte la cadena a mayúsculas
     return tema
 
 def mostrar_texto(tema):
 
     url_Wikipedia = "https://es.wikipedia.org/wiki/"  # URL de Wikipedia sin tema
 
-    tema = str(tema).lower()  # Pasamos a minúscula lo que se busca para poder armar la dirección de Wikipedia correctamente
+    tema = formatear_tema(str(tema))  # Sacamos los espacios y pasamos a mayúsculas lo que se busca
+
+    tema = tema.lower()  # Pasamos a minúscula lo que se busca para poder armar la dirección de Wikipedia correctamente
 
     respuesta = requests.get(url_Wikipedia + tema)  # Cargamos la página de Wikipedia con el tema
 
@@ -107,8 +112,12 @@ class Altapedia:
         total = self.cursor.fetchone()
 
         self.cursor.execute("SELECT * FROM temas ORDER BY popularidad DESC LIMIT 10")
-        productos = self.cursor.fetchall()
-        return productos, total
+        listado_mas = self.cursor.fetchall()
+
+        self.cursor.execute("SELECT * FROM temas ORDER BY popularidad ASC LIMIT 10")
+        listado_menos = self.cursor.fetchall()
+
+        return listado_mas, listado_menos, total
 
     def listar_alfa(self):
         self.cursor.execute("SELECT tema FROM temas ORDER BY tema")
@@ -154,8 +163,50 @@ def analizar_busqueda():
         mensaje = "Información no encontrada"   
     return render_template("index.html", resultado=resultado, mensaje=mensaje)  #  Recarga la página mandando la variable resultado para copmpletar el html
 
+@app.route("/limpiar")
+def cargar_pagina_limpiar():
+   return render_template("limpiar.html")
 
-@app.route("/limpiar", methods=["GET"])
+@app.route("/limpiar2", methods=["POST"])
+def limpiar_bd2():
+    contador = 0
+    # url = "http://127.0.0.1:5000/static/datos.txt"  # url del archivo de palabras prohibidas
+    # response = requests.get(url)    # leer archivo de palabras prohibidas a lista datos
+
+    # if response.status_code == 200:  # verificar si la descarga fue exitosa
+    #     contenido = response.text  # en contenido se guarda lo que tiene el archivo
+    # else:
+    #     contenido = ""  # no se pudo cargar el archivo, guardamos un contenido vacío
+
+    contenido = request.form["archivo"]  # El nombre del input text lo guarda en la variable busqueda
+
+    print("Contenido=" + contenido)
+
+    lista_temas = [formatear_tema(linea) for linea in contenido.split("\n")]   # armamos una lista de temas tomando cada linea de contenido
+
+    for tema in lista_temas:  # recorrer la lista preguntando si está en nuestra base de datos consultar_bd(dato)
+        if altapedia.consultar_bd(tema):  
+
+            if altapedia.eliminar_tema(tema):  # si está, eliminar_bd(dato) DELETE
+                #Si el tema se elimina correctamente contamos cuántos se eliminaron
+                contador += 1   
+            else:
+                #Si ocurre un error durante la eliminación se devuelve un mensaje de error con un código de estado HTTP 500 (Error Interno del Servidor).
+                #return jsonify({"mensaje": "Error al eliminar el término"}), 500
+                return render_template("index.html", mensaje="Error al eliminar el término")
+
+    if contador != 0:  # si se eliminó algún registro de la base de datos
+        if contador == 1:
+            mensaje_eliminados = f"Se eliminó 1 término"
+        else:
+            mensaje_eliminados = f"Se eliminaron {contador} términos"
+        #return jsonify({"mensaje": mensaje_eliminados}), 200   
+        return render_template("index.html", mensaje=mensaje_eliminados)
+    else:
+        #return jsonify({"mensaje": "No se eliminaron términos"}), 200
+        return render_template("index.html", mensaje="No se eliminaron términos")
+
+@app.route("/limpiar_", methods=["GET"])
 def limpiar_bd():
     contador = 0
     url = "http://127.0.0.1:5000/static/datos.txt"  # url del archivo de palabras prohibidas
@@ -188,38 +239,39 @@ def limpiar_bd():
         return render_template("index.html", mensaje=mensaje_eliminados)
     else:
         #return jsonify({"mensaje": "No se eliminaron términos"}), 200
-        return render_template("index.html", mensaje="No se eliminaron mensajes")
+        return render_template("index.html", mensaje="No se eliminaron términos")
 
 
-@app.route("/listaralfa", methods=["GET"])
-def listar_alfa():
-    #listar por orden alfabetico
-    listado = altapedia.listar_alfa()
-    lista_de_palabras = [d['tema'] for d in listado]  # De tupla campo - contenido queda solo el contenido
-    #return jsonify(listado)
-    return render_template("listado.html",  lista_palabras=lista_de_palabras, mensaje="Orden alfabético")
-
-@app.route("/listarpopu", methods=["GET"])
-def listar_popu():
+@app.route("/listar", methods=["GET"])
+def listar_popularidad():
     #listar por orden popularidad
-    listado, total = altapedia.listar_popu()
+    listado_mas, listado_menos, total = altapedia.listar_popu()
 
     total_nro = int(total['total_popularidad'])
 
     #lista_de_palabras = [d['tema'] for d in listado]  # De tupla campo - contenido queda solo el contenido
 
-    lista_de_palabras = [dict(tema=palabra["tema"], popularidad=palabra["popularidad"]) for palabra in listado]  # Armamos la lista de tema y popularidad
+    lista_de_palabras_mas = [dict(tema=palabra["tema"], popularidad=palabra["popularidad"]) for palabra in listado_mas]  # Armamos la lista de tema y popularidad
+    lista_de_palabras_menos = [dict(tema=palabra["tema"], popularidad=palabra["popularidad"]) for palabra in listado_menos]  # Armamos la lista de tema y popularidad
 
-    listado_para_mostrar = []  # La lista que vamos a mostrar vacía
+    listado_para_mostrar_mas = []  # La lista que vamos a mostrar vacía
+    listado_para_mostrar_menos = []  # La lista que vamos a mostrar vacía
     
-    for elemento in lista_de_palabras:  # Por cada elemento en la lista de temas y popularidad
+    for elemento in lista_de_palabras_mas:  # Por cada elemento en la lista de temas y popularidad
         popularidad = int(elemento['popularidad'])  # Guardamos la popularidad
         porcentaje_popularidad = (popularidad*100)/total_nro  #  Calculamos el porcentaje
-        listado_para_mostrar.append(f"{elemento['tema']} ({porcentaje_popularidad:.2f}%)")  # Armamos la lista para mostar "tema (porcentaje con 2 decimales%)"
+        listado_para_mostrar_mas.append(f"{elemento['tema']} ({porcentaje_popularidad:.2f}%)")  # Armamos la lista para mostar "tema (porcentaje con 2 decimales%)"
+
+    for elemento in lista_de_palabras_menos:  # Por cada elemento en la lista de temas y popularidad
+        popularidad = int(elemento['popularidad'])  # Guardamos la popularidad
+        porcentaje_popularidad = (popularidad*100)/total_nro  #  Calculamos el porcentaje
+        listado_para_mostrar_menos.append(f"{elemento['tema']} ({porcentaje_popularidad:.2f}%)")  # Armamos la lista para mostar "tema (porcentaje con 2 decimales%)"
+
+    listado = altapedia.listar_alfa()
+    lista_de_palabras = [d['tema'] for d in listado]  # De tupla campo - contenido queda solo el contenido
 
     #return jsonify(listado)
-    return render_template("listado.html",  lista_palabras=listado_para_mostrar, mensaje="Orden de popularidad - Top 10")
-    
+    return render_template("listado.html", lista_de_palabras_mas=listado_para_mostrar_mas, lista_de_palabras_menos=listado_para_mostrar_menos,lista_palabras=lista_de_palabras)    
     
 
 if __name__ == "__main__":
