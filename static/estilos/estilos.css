@@ -214,13 +214,10 @@ div textarea{
 }
 
 /* ------------------ Página "Listado" ----------------- */
-main {
-    max-width: 1200px;
-}
 
 .contenedor-listado {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     justify-content: space-evenly;
     align-content: center;
     column-gap: 10px;
@@ -246,6 +243,12 @@ main {
 }
 
 .lista-palabras-listado{
+    padding: 20px;
+    height: 450px;
+    overflow: auto;
+}
+
+.lista-palabras-listado-chico{
     padding: 20px;
     height: 150px;
     overflow: auto;
