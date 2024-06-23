@@ -218,11 +218,11 @@ div textarea{
 .contenedor-listado {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    justify-content: space-evenly;
-    align-content: center;
-    column-gap: 10px;
+    /* justify-content: space-evenly; */
+    place-items: center;
+    /* column-gap: 10px; */
     row-gap: 40px;
-    margin-top: 120px;
+    margin-top: 130px;
     padding: 20px;
 }
 
