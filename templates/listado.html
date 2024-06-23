@@ -1,55 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="{{ url_for('static', filename='estilos/estilos.css') }}">
-<link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilos/estilos.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
-<title>ALTAPEDIA</title>
+  <title>ALTAPEDIA</title>
 
-<script src="{{ url_for('static', filename='js/listado.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/listado.js') }}"></script>
 
 </head>
 
 <body>
 
   <header>
-
-      <nav class="navbar-index">
-        <a class="logo-nav" href="http://127.0.0.1:5000"><img class="logo-nav" src="{{ url_for('static', filename='img/wikipedia-logo.png') }}" alt=""></a>
-      </nav>
-
+    <nav class="navbar-index">
+      <a class="logo-nav" href="http://127.0.0.1:5000"><img class="logo-nav"
+          src="{{ url_for('static', filename='img/wikipedia-logo.png') }}" alt=""></a>
+    </nav>
   </header>
 
-  <div class="contenido-index">
+  <main>
+    <div class="contenedor-listado">
+      <!-- Listado alfabético -->
+      <!-- Campo de búsqueda -->
+      <div class="cuadro-busqueda-listado alto">
+        <div class="campo-busqueda">
+          <input type="search" id="campo-busqueda" placeholder="Buscar...">
+        </div>
 
-    <div class="cuadro-busqueda"> 
-      <form action="/listaralfa" method="get">
-        <input type="submit" value="Listado Alfabético">
-      </form>
-      <form action="/listarpopu" method="get">
-        <input type="submit" value="Listado por Popularidad">
-      </form>
-      
+        <div class="cuadro-mensaje-listado">
+          <h2>Términos guardados</h2>
+          <h2>(ordenados alfabéticamente)</h2>
+        </div>
+
+        <!-- <form action="/listaralfa" method="get">
+          <input type="submit" value="Listado Alfabético">
+        </form> -->
+
+        <div class="lista-palabras-listado">
+          <ul id="lista-palabras">
+            <!-- Acá se cargarán las palabras -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Listado de las más populares -->
+      <div class="cuadro-busqueda-listado">
+        <div class="cuadro-mensaje-listado">
+          <h2>Los 10 más buscados</h2>
+        </div>
+
+        <div class="lista-palabras-listado-chico">
+          <ul id="lista-palabras">
+            <!-- Acá se cargarán las palabras -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Listado de las menos populares -->
+      <div class="cuadro-busqueda-listado">
+        <div class="cuadro-mensaje-listado">
+          <h2>Los 10 menos buscados</h2>
+        </div>
+
+        <div class="lista-palabras-listado-chico">
+          <ul id="lista-palabras">
+            <!-- Acá se cargarán las palabras -->
+          </ul>
+        </div>
+      </div>
+
     </div>
-    <div class="campo-busqueda">
-      <input type="search" id="campo-busqueda" placeholder="Buscar...">
-    </div>
-
-    <div class="cuadro-mensaje">
-      {{mensaje}}
-    </div>
-
-    <div class="lista-palabras">
-      <ul id="lista-palabras">
-      <!-- Acá se cargarán las palabras -->
-      </ul>
-    </div>
-
-  
-</div>
-
+  </main>
 
   <script>
     var listaPalabras = {{ lista_palabras | tojson }};  // Carga la lista de palabras que recibe de Python
