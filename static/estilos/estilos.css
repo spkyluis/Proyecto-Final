@@ -57,9 +57,17 @@ table {
 input{
     height: 30px;
     width: 25vw;
-    min-width: 260px;
+    min-width: 350px;
     
 }
+
+.cuadro-busqueda form{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+
 
 button{
     height: 30px;
@@ -71,7 +79,7 @@ button{
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     margin-bottom: 5px;
     margin-top: 150px;
@@ -124,6 +132,7 @@ img.logo-nav{
 }
 
 .cuadro-busqueda{
+
     display: flex;
     flex-direction: row;
     gap: 20px;
@@ -216,13 +225,28 @@ textarea#cuadro-texto-limpiar{
 
 /* --------------- (corte) ------------------------- */
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 950px) {
+
+    .cuadro-busqueda form{
+        flex-direction: column;
+        align-items: center;
+        gap: 7px;
+    }
 
     .cuadro-busqueda{
         /* display: flex; */
         flex-direction: column;
-        align-items: center;        
+        align-items: center; 
+                
     }
+}
+
+@media screen and (max-width: 768px) {
+
+    input{
+        min-width: 310px;      
+    }
+
 
     .cuadro-busqueda-listado{
         grid-column: 1/3;
