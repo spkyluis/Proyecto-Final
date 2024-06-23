@@ -11,7 +11,6 @@ app = Flask(__name__, static_folder='static')
 CORS(app)  # Esto habilitará CORS para todas las rutas
 
 def formatear_tema(tema):
-    #tema = tema.strip().upper()
     tema = tema.strip()  # Elimina espacios al principio y al final
     tema = ' '.join(tema.split())  # Separa por espacios las palabras y las une con un solo espacio ("abc     de" -> "abc de")
     tema = tema.upper()  # Convierte la cadena a mayúsculas
@@ -164,19 +163,12 @@ def analizar_busqueda():
     return render_template("index.html", resultado=resultado, mensaje=mensaje)  #  Recarga la página mandando la variable resultado para copmpletar el html
 
 @app.route("/limpiar")
-def cargar_pagina_limpiar():
+def cargar_pagina_limpiar():  # Si carga la página/limpiar desde el navegador directo, carga la página limpiar.html  
    return render_template("limpiar.html")
 
-@app.route("/limpiar", methods=["POST"])
-def limpiar_bd2():
+@app.route("/limpiar", methods=["POST"])  # Si carga la página/limpiar desde formumalio, realiza la limpieza de la base de datos 
+def limpiar_bd2():  
     contador = 0
-    # url = "http://127.0.0.1:5000/static/datos.txt"  # url del archivo de palabras prohibidas
-    # response = requests.get(url)    # leer archivo de palabras prohibidas a lista datos
-
-    # if response.status_code == 200:  # verificar si la descarga fue exitosa
-    #     contenido = response.text  # en contenido se guarda lo que tiene el archivo
-    # else:
-    #     contenido = ""  # no se pudo cargar el archivo, guardamos un contenido vacío
 
     contenido = request.form["archivo"]  # Lo que tiene el campo de texto lo guarda en la variable contenido
 
@@ -241,13 +233,10 @@ def limpiar_bd():
 
 
 @app.route("/listar", methods=["GET"])
-def listar_popularidad():
-    #listar por orden popularidad
-    listado_mas, listado_menos, total = altapedia.listar_popu()
+def listar():
+    listado_mas, listado_menos, total = altapedia.listar_popu()  # Prepara los listados de popularidad
 
     total_nro = int(total['total_popularidad'])
-
-    #lista_de_palabras = [d['tema'] for d in listado]  # De tupla campo - contenido queda solo el contenido
 
     lista_de_palabras_mas = [dict(tema=palabra["tema"], popularidad=palabra["popularidad"]) for palabra in listado_mas]  # Armamos la lista de tema y popularidad
     lista_de_palabras_menos = [dict(tema=palabra["tema"], popularidad=palabra["popularidad"]) for palabra in listado_menos]  # Armamos la lista de tema y popularidad
@@ -265,10 +254,9 @@ def listar_popularidad():
         porcentaje_popularidad = (popularidad*100)/total_nro  #  Calculamos el porcentaje
         listado_para_mostrar_menos.append(f"{elemento['tema']} ({porcentaje_popularidad:.2f}%)")  # Armamos la lista para mostar "tema (porcentaje con 2 decimales%)"
 
-    listado = altapedia.listar_alfa()
+    listado = altapedia.listar_alfa()  # Prepara el listado alfabético
     lista_de_palabras = [d['tema'] for d in listado]  # De tupla campo - contenido queda solo el contenido
 
-    #return jsonify(listado)
     return render_template("listado.html", lista_de_palabras_mas=listado_para_mostrar_mas, lista_de_palabras_menos=listado_para_mostrar_menos,lista_palabras=lista_de_palabras)    
     
 
