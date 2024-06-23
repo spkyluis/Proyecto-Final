@@ -167,7 +167,7 @@ def analizar_busqueda():
 def cargar_pagina_limpiar():
    return render_template("limpiar.html")
 
-@app.route("/limpiar2", methods=["POST"])
+@app.route("/limpiar", methods=["POST"])
 def limpiar_bd2():
     contador = 0
     # url = "http://127.0.0.1:5000/static/datos.txt"  # url del archivo de palabras prohibidas
@@ -178,9 +178,7 @@ def limpiar_bd2():
     # else:
     #     contenido = ""  # no se pudo cargar el archivo, guardamos un contenido vacío
 
-    contenido = request.form["archivo"]  # El nombre del input text lo guarda en la variable busqueda
-
-    print("Contenido=" + contenido)
+    contenido = request.form["archivo"]  # Lo que tiene el campo de texto lo guarda en la variable contenido
 
     lista_temas = [formatear_tema(linea) for linea in contenido.split("\n")]   # armamos una lista de temas tomando cada linea de contenido
 
@@ -193,7 +191,7 @@ def limpiar_bd2():
             else:
                 #Si ocurre un error durante la eliminación se devuelve un mensaje de error con un código de estado HTTP 500 (Error Interno del Servidor).
                 #return jsonify({"mensaje": "Error al eliminar el término"}), 500
-                return render_template("index.html", mensaje="Error al eliminar el término")
+                return render_template("limpiar.html", mensaje="Error al eliminar el término")
 
     if contador != 0:  # si se eliminó algún registro de la base de datos
         if contador == 1:
@@ -201,10 +199,10 @@ def limpiar_bd2():
         else:
             mensaje_eliminados = f"Se eliminaron {contador} términos"
         #return jsonify({"mensaje": mensaje_eliminados}), 200   
-        return render_template("index.html", mensaje=mensaje_eliminados)
+        return render_template("limpiar.html", mensaje=mensaje_eliminados)
     else:
         #return jsonify({"mensaje": "No se eliminaron términos"}), 200
-        return render_template("index.html", mensaje="No se eliminaron términos")
+        return render_template("limpiar.html", mensaje="No se eliminaron términos")
 
 @app.route("/limpiar_", methods=["GET"])
 def limpiar_bd():

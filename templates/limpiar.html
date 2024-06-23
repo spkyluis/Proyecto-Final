@@ -24,22 +24,18 @@
         <div class="contenido-index">
 
             <div class="cuadro-busqueda-limpiar">
-                <form action="/limpiar2" method="post">
+                <form action="/limpiar" method="post">
                     <input type="submit" value="Limpiar base de datos">
+                    <div class="cuadro-mensaje">
+                        {{mensaje}}
+                    </div>
                     <textarea name="archivo" id="cuadro-texto-limpiar" placeholder="Ingrese las palabras a eliminar"></textarea>
                 </form>
                 <!-- <button name="listados" onclick="window.location.href='/listar'">Ver listados</button> -->
             </div>
 
-            <div class="cuadro-mensaje">
-                {{mensaje}}
-            </div>
 
 
-            <!-- <div class="cuadro-texto">
-                <textarea name="archivo" id="" rows="30" 
-                    placeholder="Ingrese las palabras a eliminar">{{resultado}}</textarea>
-            </div> -->
 
         </div>
     </main>
