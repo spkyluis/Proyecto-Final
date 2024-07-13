@@ -224,6 +224,7 @@ div textarea{
     row-gap: 40px;
     margin-top: 120px;
     padding: 20px;
+    place-items: center;
 }
 
 .cuadro-busqueda-listado{
