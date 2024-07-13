@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {  // En cuanto se carga la página, ejecuta esta función
 
-  function cargarListaCompleta(listaPalabras) {
-    var lista = document.getElementById('lista-palabras');  //  Nos ubicamos en la lista de palabras
+  function cargarLista(listaPalabras, donde) {  //  Carga una lista de palabras en el id que le pasemos por parámetro
+    var lista = document.getElementById(donde);  //  Nos ubicamos en la lista de palabras
     lista.innerHTML = ''; // Limpiar la lista antes de cargar.
 
     listaPalabras.forEach(function (palabra) {  // Para cada palabra en la lista...
@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   }
 
-  cargarListaCompleta(listaPalabras);  // Se carga la lista completa al cargar la página por primera vez
+  cargarLista(listaPalabras, 'lista-palabras')  // Se carga la lista completa al cargar la página por primera vez
+  cargarLista(lista_para_mostrar_mas, 'lista-palabras-top10mas')  // Se carga la lista top 10 más populares al cargar la página por primera vez
+  cargarLista(lista_para_mostrar_menos, 'lista-palabras-top10menos')  // Se carga la lista top 10 más populares al cargar la página por primera vez
 
 });
 
@@ -25,6 +27,6 @@ const filtrar = () => {  // Filtrar la lista de palabras
   listaPalabras.forEach((elemento) => {   // Para cada elemento de la lista de palabras...
     const palabra = elemento.textContent.toUpperCase();  // Guardar el contenido de la palabra
     elemento.style.display = palabra.includes(valorBusqueda) ? "" : "none";  // Si el contenido  de la palabra coincide con el valor de búsqueda, se muestra, de lo contrario se oculta
-
   });
+  
 }

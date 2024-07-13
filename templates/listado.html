@@ -78,12 +78,13 @@
 
   <script>
     var listaPalabras = {{ lista_palabras | tojson }};  // Carga la lista de palabras que recibe de Python
+    var lista_para_mostrar_mas = {{ lista_de_palabras_mas | tojson }};  // Carga la lista de palabras que recibe de Python
+    var lista_para_mostrar_menos = {{ lista_de_palabras_menos | tojson }};  // Carga la lista de palabras que recibe de Python
 
     const campoBusqueda = document.getElementById("campo-busqueda");  // Ubica el campo de búsqueda en el listado de palabras
     campoBusqueda.addEventListener("input", filtrar);  // Está atento a cuando se escriba algo en el campo de búsqueda y llama a la función correspondiente (filtrar)
 
   </script>
-
 
 
 </body>
